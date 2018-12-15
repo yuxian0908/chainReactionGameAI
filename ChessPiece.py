@@ -11,7 +11,7 @@ class ChessPiece:
         self.point = self.point+1
         return self.point >= self.margin
 
-    def explosion(self):
+    def reset(self):
         self.color = "w"
         self.point = 0
     

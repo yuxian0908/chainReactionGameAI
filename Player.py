@@ -18,7 +18,7 @@ class Player:
         if board.table[row][col].color=="w" or board.table[row][col].color==self.color or explode:
             board.table[row][col].setColor(self.color)
             if board.table[row][col].addOne():
-                board.table[row][col].explosion()
+                board.table[row][col].reset()
                 for i in direction:
                     self.makeMove(board, row+i[0], col+i[1], True)
         else:

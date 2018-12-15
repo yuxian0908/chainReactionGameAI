@@ -5,6 +5,19 @@ class Game:
     def __init__(self, row, col):
         self.row = row
         self.col = col
+        self.count = 0
+
+    def judge(self, board):
+        winner = ""
+        row = self.row
+        col = self.col
+        for i in range(row):
+            for j in range(col):
+                if winner != "" and winner!= board.table[i][j].color and board.table[i][j].color!="w":
+                    return ""
+                if winner == "" and board.table[i][j].color != "w":
+                    winner = board.table[i][j].color
+        return winner
 
     def go(self):
 
@@ -22,6 +35,7 @@ class Game:
         print(players[(playerIndex+1)%len(players)].color+"'s turn")
         inp = input()
 
+        # user move
         while(inp!= "q"):
             try:
                 move = [int(n) for n in inp.split()]
@@ -33,9 +47,17 @@ class Game:
                 print(repr(error))
 
             board.printBoard()
+            
+            # count the round and judge the game
+            self.count = self.count+1
+            j = self.judge(board)
+            if j!="" and self.count>1:
+                print(j+" wins!")
+                return
+            # next round
             print(players[(playerIndex+1)%len(players)].color+"'s turn")
             inp = input()
-        
+    
 
 if __name__ == '__main__':
     game = Game(7,6)
