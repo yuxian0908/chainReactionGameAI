@@ -7,7 +7,7 @@
 3. Board class 
 4. Player class
 
-## start
+## HOW TO PLAY
 ```
 # python3 Game.py <board row number> <board column number>
 python3 Game.py 5 5
@@ -17,4 +17,8 @@ A B C
 
 # row column (to make movement)
 2 3
+
+# stop the game
+q
+
 ```
