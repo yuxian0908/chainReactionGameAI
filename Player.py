@@ -7,11 +7,11 @@ class Player:
 
     def makeMove(self, board, row, col, explode=False):
         # check if move is out of board
-        if not explode and (row>board.row or col>board.col or row<0 or col<0):
+        if not explode and (row>=board.row or col>=board.col or row<0 or col<0):
             raise ValueError('out of board.')
 
         # if is explode then do not throw exception
-        if explode and (row>board.row or col>board.col or row<0 or col<0):
+        if explode and (row>=board.row or col>=board.col or row<0 or col<0):
             return
 
         # if move is legal

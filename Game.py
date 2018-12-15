@@ -1,3 +1,4 @@
+import sys
 from Board import Board
 from Player import Player
 
@@ -19,7 +20,7 @@ class Game:
                     winner = board.table[i][j].color
         return winner
 
-    def go(self):
+    def go(self, people):
 
         # initialize chess board
         board = Board(self.row, self.col)
@@ -28,26 +29,26 @@ class Game:
         # initialize players
         players = []
         playerIndex = 0
-        players.append(Player("G"))
-        players.append(Player("R"))
+        for i in people:
+            players.append(Player(i))
 
         # get user input
-        print(players[(playerIndex+1)%len(players)].color+"'s turn")
+        print(players[playerIndex].color+"'s turn")
         inp = input()
 
-        # user move
+        # user movement
         while(inp!= "q"):
             try:
                 move = [int(n) for n in inp.split()]
                 # get nth player and make move
-                playerIndex = (playerIndex+1)%len(players)
                 players[playerIndex].makeMove(board, move[0], move[1])
+                playerIndex = (playerIndex+1)%len(players)
             except Exception as error:
-                playerIndex = playerIndex-1
+                self.count = self.count-1
                 print(repr(error))
 
             board.printBoard()
-            
+
             # count the round and judge the game
             self.count = self.count+1
             j = self.judge(board)
@@ -55,10 +56,12 @@ class Game:
                 print(j+" wins!")
                 return
             # next round
-            print(players[(playerIndex+1)%len(players)].color+"'s turn")
+            print(players[playerIndex].color+"'s turn")
             inp = input()
     
 
 if __name__ == '__main__':
-    game = Game(7,6)
-    game.go()
+    init = sys.argv
+    game = Game(int(init[1]),int(init[2]))
+    people = [n for n in input().split()]
+    game.go(people)
