@@ -60,7 +60,7 @@ class Game:
             print(players[playerIndex].color+"'s turn")
             inp = input()
     
-    def goAI(self):
+    def goAI(self, limit):
 
         # initialize chess board
         board = Board(self.row, self.col)
@@ -68,7 +68,7 @@ class Game:
 
         # initialize players
         p1 = Player("P")
-        players = [p1, AI("C", p1)]
+        players = [p1, AI("C", p1, limit)]
         playerIndex = 0
         
         # get user input
@@ -79,25 +79,34 @@ class Game:
         while(inp!= "q"):
             try:
                 move = [int(n) for n in inp.split()]
+
                 # player makes move
                 players[0].makeMove(board, move[0], move[1])
+                board.printBoard()
+                # count the round and judge the game
+                self.count = self.count+1
+                j = self.judge(board)
+                if j!="" and self.count>1:
+                    print(j+" wins!")
+                    return
+                print(players[1].color+"'s turn")
+
+
+                # AI make move
                 players[1].think(board)
+                board.printBoard()
+                # count the round and judge the game
+                self.count = self.count+1
+                j = self.judge(board)
+                if j!="" and self.count>1:
+                    print(j+" wins!")
+                    return
+                print(players[0].color+"'s turn")
 
             except Exception as error:
                 self.count = self.count-1
                 print(repr(error))
 
-            board.printBoard()
-
-            # count the round and judge the game
-            self.count = self.count+1
-            j = self.judge(board)
-            if j!="" and self.count>1:
-                print(j+" wins!")
-                return
-
-            # next round
-            print(players[playerIndex].color+"'s turn")
             inp = input()
 
 if __name__ == '__main__':
@@ -105,12 +114,12 @@ if __name__ == '__main__':
 
     if init[1]=="People" :
         # for multiple user
-        game = Game(int(init[1]),int(init[2]))
+        game = Game(int(init[2]),int(init[3]))
         people = [n for n in input().split()]
         game.goPeople(people)
 
     elif(init[1]=="AI"):
         # for AI
         game = Game(5,6)
-        game.goAI()
+        game.goAI(int(init[2]))
     
