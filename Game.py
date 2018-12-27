@@ -66,12 +66,9 @@ class Game:
         board = Board(self.row, self.col)
         board.printBoard()
 
-        # for test
-        t = AI("t")
-        t.think(board)
-
         # initialize players
-        players = [Player("P"), AI("C")]
+        p1 = Player("P")
+        players = [p1, AI("C", p1)]
         playerIndex = 0
         
         # get user input

@@ -2,8 +2,9 @@ from Player import Player
 from Board import Board
 
 class AI(Player):
-    def __init__(self, name):
+    def __init__(self, name, enemy):
         super(AI, self).__init__(name)
+        self.enemy = enemy
 
     def think(self, board):
         self.makeMove(board,1,1)
