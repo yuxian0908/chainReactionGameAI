@@ -19,7 +19,20 @@ class Board:
                     r.append(ChessPiece(4,i,j))
             self.table.append(r)
 
-    
+    # copy constructor
+    def copy(self, base):
+        self.row = base.row
+        self.col = base.col
+        self.table = []
+        row = self.row
+        col = self.col
+        for i in range(row):
+            r = []
+            for j in range(col):
+                r.append( ChessPiece(4,i,j).copy(base.table[i][j]) )
+            self.table.append(r)
+        return self
+
     def printBoard(self):
         for i in range(self.row):
             temp = ""

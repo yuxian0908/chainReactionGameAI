@@ -8,9 +8,11 @@
 4. Player class
 
 ## HOW TO PLAY
+
+- play with people
 ```
-# python3 Game.py <board row number> <board column number>
-python3 Game.py 5 5
+# python3 Game.py People <board row number> <board column number>
+python3 Game.py People 5 5
 
 # players name (you can make any number of players)
 A B C
@@ -20,5 +22,12 @@ A B C
 
 # stop the game
 q
+
+```
+
+- play with AI
+```
+# python3 Game.py AI
+python3 Game.py AI
 
 ```

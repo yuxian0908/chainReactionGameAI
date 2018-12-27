@@ -23,3 +23,9 @@ class Player:
                     self.makeMove(board, row+i[0], col+i[1], True)
         else:
             raise ValueError('some one took this place.')
+
+    def canMove(self, board, row, col):
+        if board.table[row][col].color=="w" or board.table[row][col].color==self.color:
+            return True
+        else:
+            return False
