@@ -60,7 +60,18 @@ class Game:
             print(players[playerIndex].color+"'s turn")
             inp = input()
     
-    def goAI(self, limit):
+    def goAI(self, difficulty):
+
+        # setup difficulty
+        limit = 60
+        if difficulty==1:
+            limit = 50
+        elif difficulty==2:
+            limit = 40
+        elif difficulty==3:
+            limit = 30
+        elif difficulty==4:
+            limit = 20
 
         # initialize chess board
         board = Board(self.row, self.col)
@@ -80,32 +91,40 @@ class Game:
             try:
                 move = [int(n) for n in inp.split()]
 
-                # player makes move
-                players[0].makeMove(board, move[0], move[1])
-                board.printBoard()
-                # count the round and judge the game
-                self.count = self.count+1
-                j = self.judge(board)
-                if j!="" and self.count>1:
-                    print(j+" wins!")
-                    return
-                print(players[1].color+"'s turn")
+                try:
+                    # player makes move
+                    players[0].makeMove(board, move[0], move[1])
+                    board.printBoard()
+                    # count the round and judge the game
+                    self.count = self.count+1
+                    j = self.judge(board)
+                    if j!="" and self.count>1:
+                        print(j+" wins!")
+                        return
+                    print(players[1].color+"'s turn")
 
+                except RecursionError as error:
+                    print(players[0].color+" wins!")
 
-                # AI make move
-                players[1].think(board)
-                board.printBoard()
-                # count the round and judge the game
-                self.count = self.count+1
-                j = self.judge(board)
-                if j!="" and self.count>1:
-                    print(j+" wins!")
-                    return
-                print(players[0].color+"'s turn")
+                try:
+                    # AI make move
+                    players[1].think(board, self.count)
+                    board.printBoard()
+                    # count the round and judge the game
+                    self.count = self.count+1
+                    j = self.judge(board)
+                    if j!="" and self.count>1:
+                        print(j+" wins!")
+                        return
+                    print(players[0].color+"'s turn")
+                
+                except RecursionError as error:
+                    print(players[1].color+" wins!")
 
-            except Exception as error:
+            except ValueError as error:
                 self.count = self.count-1
                 print(repr(error))
+
 
             inp = input()
 
