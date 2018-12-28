@@ -2,18 +2,19 @@ from Player import Player
 from Board import Board
 
 class AI(Player):
-    def __init__(self, name, enemy, beginHard):
+    def __init__(self, name, enemy, beginHard, nextHard):
         super(AI, self).__init__(name)
         self.enemy = enemy
         self.beginHard = beginHard
+        self.nextHard = nextHard
         
     def think(self, board, count):
         nB = Board(board.row, board.col).copy(board)
         gTree = GameTree(nB, self)
-        if count<self.beginHard:
-            gTree.makeChild([self, self.enemy], 0, 2)
+        if count<self.nextHard:
+            gTree.makeChild([self, self.enemy], 0, self.beginHard)
         else:
-            gTree.makeChild([self, self.enemy], 0, 3)
+            gTree.makeChild([self, self.enemy], 0, self.beginHard+1)
 
         maxCor = [0, 0]
         maxi = -100000

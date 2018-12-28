@@ -27,7 +27,7 @@ q
 
 - play with AI
 ```
-# python3 Game.py AI <difficulty 1-4>
-python3 Game.py AI
+# python3 Game.py AI <difficulty 0-5>
+python3 Game.py AI 1
 
 ```

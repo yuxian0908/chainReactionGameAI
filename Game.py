@@ -63,15 +63,26 @@ class Game:
     def goAI(self, difficulty):
 
         # setup difficulty
-        limit = 60
-        if difficulty==1:
-            limit = 50
+        beginHard = 0
+        nextHard = 50
+        if difficulty==0:
+            beginHard = 0
+            nextHard = 50
+        elif difficulty==1:
+            beginHard = 0
+            nextHard = 20
         elif difficulty==2:
-            limit = 40
+            beginHard = 1
+            nextHard = 40
         elif difficulty==3:
-            limit = 30
+            beginHard = 1
+            nextHard = 20
         elif difficulty==4:
-            limit = 20
+            beginHard = 2
+            nextHard = 40
+        elif difficulty==5:
+            beginHard = 2
+            nextHard = 20
 
         # initialize chess board
         board = Board(self.row, self.col)
@@ -79,7 +90,7 @@ class Game:
 
         # initialize players
         p1 = Player("P")
-        players = [p1, AI("C", p1, limit)]
+        players = [p1, AI("C", p1, beginHard, nextHard)]
         playerIndex = 0
         
         # get user input
