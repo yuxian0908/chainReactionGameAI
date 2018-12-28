@@ -1,11 +1,15 @@
+# CHAIN REACTION GAME AND AI
+
 ## Introduction
-- chain reaction game
+- chain reaction game 
+- using game tree to build ai robot
 
 ## Architecture
 1. Game class (enter point of the project)
 2. ChessPiece class
 3. Board class 
 4. Player class
+5. AI class
 
 ## HOW TO PLAY
 
