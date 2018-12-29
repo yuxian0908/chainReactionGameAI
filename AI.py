@@ -24,6 +24,7 @@ class AI(Player):
                     maxi = gTree.children[i][j].sitPoint
                     maxCor = gTree.children[i][j].coordinate
         
+        print(str(maxCor[0])+" "+str(maxCor[1]))
         self.makeMove(board, maxCor[0], maxCor[1])
 
 class GameTree:
