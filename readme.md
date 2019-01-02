@@ -35,3 +35,9 @@ q
 python3 Game.py AI 1
 
 ```
+
+- watch AI play
+```
+# python3 Game.py AI_GAME <difficulty 0-5> <difficulty 0-5>
+python3 Game.py AI_GAME 2 3
+```
