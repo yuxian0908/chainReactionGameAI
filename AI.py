@@ -12,20 +12,12 @@ class AI(Player):
         nB = Board(board.row, board.col).copy(board)
         gTree = GameTree(nB, self)
         if count<self.nextHard:
-            gTree.makeChild([self, self.enemy], 0, self.beginHard)
+            gTree.makeChild([self, self.enemy], 0, self.beginHard, gTree)
         else:
-            gTree.makeChild([self, self.enemy], 0, self.beginHard+1)
-
-        maxCor = [0, 0]
-        maxi = -100000
-        for i in range(gTree.row):
-            for j in range(gTree.col):
-                if gTree.children[i][j] != 0 and maxi < gTree.children[i][j].sitPoint:
-                    maxi = gTree.children[i][j].sitPoint
-                    maxCor = gTree.children[i][j].coordinate
+            gTree.makeChild([self, self.enemy], 0, self.beginHard+1, gTree)
         
-        print(str(maxCor[0])+" "+str(maxCor[1]))
-        self.makeMove(board, maxCor[0], maxCor[1])
+        print(str(gTree.coordinate[0])+" "+str(gTree.coordinate[1]))
+        self.makeMove(board, gTree.coordinate[0], gTree.coordinate[1])
 
 class GameTree:
     def __init__(self, root, AI, coorR=-1, coorC=-1):
@@ -36,21 +28,28 @@ class GameTree:
         self.AI = AI
         self.sitPoint = self.calSituation()
         self.coordinate = [coorR, coorC]
+        self.curMax = -10000
 
     # make children game tree
-    def makeChild(self, player, layer, limit):
+    def makeChild(self, player, layer, limit, root):
         if layer>limit:
             return
-        mini = 100000
+        self.sitPoint = 100000
         for i in range(self.row):
             for j in range(self.col):
                 if(player[layer%2].canMove(self.board, i, j)):
                     nB = Board(self.row, self.col).copy(self.board)
                     player[layer%2].makeMove(nB, i, j)
                     self.children[i][j] = GameTree(nB, self.AI, i, j)
-                    self.children[i][j].makeChild(player, layer+1, limit)
-                    mini = min(mini, self.children[i][j].sitPoint)
-        self.sitPoint = mini
+                    self.children[i][j].makeChild(player, layer+1, limit, root)
+                    self.sitPoint = min(self.sitPoint, self.children[i][j].sitPoint)
+                    if layer==0:
+                        if self.curMax<self.children[i][j].sitPoint:
+                            self.curMax = self.children[i][j].sitPoint
+                            self.coordinate = self.children[i][j].coordinate
+                    elif self.children[i][j].sitPoint<=root.curMax:
+                        return
+
 
     def calSituation(self):
         alliance = 0
