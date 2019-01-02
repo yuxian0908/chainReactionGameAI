@@ -53,7 +53,7 @@ class GameTree:
                         if layer%2==0:
                             self.curMax = 100000
                             self.coordinate = [i,j]
-                            break
+                            self.sitPoint = 100000
                         else:
                             self.sitPoint = -100000
                         continue
