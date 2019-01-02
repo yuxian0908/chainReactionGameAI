@@ -28,21 +28,42 @@ class GameTree:
         self.AI = AI
         self.sitPoint = self.calSituation()
         self.coordinate = [coorR, coorC]
-        self.curMax = -10000
+        self.curMax = -100000
 
     # make children game tree
     def makeChild(self, player, layer, limit, root):
         if layer>limit:
             return
         self.sitPoint = 100000
+        count = 0
         for i in range(self.row):
             for j in range(self.col):
                 if(player[layer%2].canMove(self.board, i, j)):
+                    count = count+1
+
+                    # default coordinate
+                    if layer==0 and count==1:
+                        self.coordinate = [i,j]
                     nB = Board(self.row, self.col).copy(self.board)
-                    player[layer%2].makeMove(nB, i, j)
+
+                    # prevent recursion error
+                    try:
+                        player[layer%2].makeMove(nB, i, j)
+                    except RecursionError as error:
+                        if layer%2==0:
+                            self.curMax = 100000
+                            self.coordinate = [i,j]
+                            break
+                        else:
+                            self.sitPoint = -100000
+                        continue
+
+                    # recursive call
                     self.children[i][j] = GameTree(nB, self.AI, i, j)
                     self.children[i][j].makeChild(player, layer+1, limit, root)
                     self.sitPoint = min(self.sitPoint, self.children[i][j].sitPoint)
+
+                    # cut tree
                     if layer==0:
                         if self.curMax<self.children[i][j].sitPoint:
                             self.curMax = self.children[i][j].sitPoint

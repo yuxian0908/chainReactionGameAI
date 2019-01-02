@@ -63,26 +63,7 @@ class Game:
     def goAI(self, difficulty):
 
         # setup difficulty
-        beginHard = 0
-        nextHard = 50
-        if difficulty==0:
-            beginHard = 0
-            nextHard = 50
-        elif difficulty==1:
-            beginHard = 0
-            nextHard = 20
-        elif difficulty==2:
-            beginHard = 1
-            nextHard = 40
-        elif difficulty==3:
-            beginHard = 1
-            nextHard = 20
-        elif difficulty==4:
-            beginHard = 2
-            nextHard = 40
-        elif difficulty==5:
-            beginHard = 2
-            nextHard = 20
+        dif = self.setupDif(difficulty)
 
         # initialize chess board
         board = Board(self.row, self.col)
@@ -90,7 +71,7 @@ class Game:
 
         # initialize players
         p1 = Player("P")
-        players = [p1, AI("C", p1, beginHard, nextHard)]
+        players = [p1, AI("C", p1, dif[0], dif[1])]
         playerIndex = 0
         
         # get user input
@@ -111,11 +92,12 @@ class Game:
                     j = self.judge(board)
                     if j!="" and self.count>1:
                         print(j+" wins!")
-                        return
+                        break
                     print(players[1].color+"'s turn")
 
                 except RecursionError as error:
                     print(players[0].color+" wins!")
+                    break
 
                 try:
                     # AI make move
@@ -126,11 +108,12 @@ class Game:
                     j = self.judge(board)
                     if j!="" and self.count>1:
                         print(j+" wins!")
-                        return
+                        break
                     print(players[0].color+"'s turn")
                 
                 except RecursionError as error:
                     print(players[1].color+" wins!")
+                    break
 
             except ValueError as error:
                 self.count = self.count-1
@@ -141,55 +124,16 @@ class Game:
 
     def goAI_GAME(self, dif1, dif2):
         # setup difficulty
-        beginHard1 = 0
-        nextHard1 = 50
-        if dif1==0:
-            beginHard1 = 0
-            nextHard1 = 50
-        elif dif1==1:
-            beginHard1 = 0
-            nextHard1 = 20
-        elif dif1==2:
-            beginHard1 = 1
-            nextHard1 = 40
-        elif dif1==3:
-            beginHard1 = 1
-            nextHard1 = 20
-        elif dif1==4:
-            beginHard1 = 2
-            nextHard1 = 40
-        elif dif1==5:
-            beginHard1 = 2
-            nextHard1 = 20
-
-        beginHard2 = 0
-        nextHard2 = 50
-        if dif2==0:
-            beginHard2 = 0
-            nextHard2 = 50
-        elif dif2==1:
-            beginHard2 = 0
-            nextHard2 = 20
-        elif dif2==2:
-            beginHard2 = 1
-            nextHard2 = 40
-        elif dif2==3:
-            beginHard2 = 1
-            nextHard2 = 20
-        elif dif2==4:
-            beginHard2 = 2
-            nextHard2 = 40
-        elif dif2==5:
-            beginHard2 = 2
-            nextHard2 = 20
+        d1 = self.setupDif(dif1)
+        d2 = self.setupDif(dif2)
             
         # initialize chess board
         board = Board(self.row, self.col)
         board.printBoard()
 
         # initialize players
-        p1 = AI("P", Player("C"), beginHard1, nextHard1)
-        p2 = AI("C", p1, beginHard2, nextHard2)
+        p1 = AI("A1", Player("A2"), d1[0], d1[1])
+        p2 = AI("A2", p1, d2[0], d2[1])
         players = [p1, p2]
         playerIndex = 0
         
@@ -199,7 +143,7 @@ class Game:
         # user movement
         while(True):
             try:
-                # player makes move
+                # AI1 makes move
                 players[0].think(board, self.count)
                 board.printBoard()
                 # count the round and judge the game
@@ -215,7 +159,7 @@ class Game:
                 break
 
             try:
-                # AI make move
+                # AI2 make move
                 players[1].think(board, self.count)
                 board.printBoard()
                 # count the round and judge the game
@@ -229,6 +173,31 @@ class Game:
             except RecursionError as error:
                 print(players[1].color+" wins!")
                 break
+
+    def setupDif(self, difficulty):
+        # setup difficulty
+        beginHard = 0
+        nextHard = 50
+        if difficulty==0:
+            beginHard = 0
+            nextHard = 50
+        elif difficulty==1:
+            beginHard = 0
+            nextHard = 20
+        elif difficulty==2:
+            beginHard = 1
+            nextHard = 40
+        elif difficulty==3:
+            beginHard = 1
+            nextHard = 20
+        elif difficulty==4:
+            beginHard = 2
+            nextHard = 40
+        elif difficulty==5:
+            beginHard = 2
+            nextHard = 20
+        return [beginHard, nextHard]
+
 
 if __name__ == '__main__':
     init = sys.argv
