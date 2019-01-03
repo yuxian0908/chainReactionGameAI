@@ -182,19 +182,19 @@ class Game:
             beginHard = 0
             nextHard = 50
         elif difficulty==1:
-            beginHard = 0
+            beginHard = 1
             nextHard = 20
         elif difficulty==2:
-            beginHard = 1
+            beginHard = 2
             nextHard = 40
         elif difficulty==3:
-            beginHard = 1
+            beginHard = 3
             nextHard = 20
         elif difficulty==4:
-            beginHard = 2
+            beginHard = 4
             nextHard = 40
         elif difficulty==5:
-            beginHard = 2
+            beginHard = 5
             nextHard = 20
         return [beginHard, nextHard]
 
