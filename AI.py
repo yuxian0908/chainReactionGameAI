@@ -75,26 +75,6 @@ class GameTree:
     def calSituation(self):
         alliance = 0
         enemy = 0
-        # for i in range(self.row):
-        #     if self.board.table[i][0].color == self.AI.color:
-        #         alliance = alliance+self.board.table[i][0].point
-        #     if self.board.table[i][self.col-1].color == self.AI.color:
-        #         alliance = alliance+self.board.table[i][self.col-1].point
-        #     if self.board.table[i][0].color != self.AI.color:
-        #         alliance = alliance+self.board.table[i][0].point
-        #     if self.board.table[i][self.col-1].color != self.AI.color:
-        #         enemy = enemy+self.board.table[i][self.col-1].point
-
-        # for i in range(self.col):
-        #     if self.board.table[0][i].color == self.AI.color:
-        #         alliance = alliance+self.board.table[0][i].point
-        #     if self.board.table[self.row-1][i].color == self.AI.color:
-        #         alliance = alliance+self.board.table[self.row-1][i].point
-        #     if self.board.table[0][i].color != self.AI.color:
-        #         alliance = alliance+self.board.table[0][i].point
-        #     if self.board.table[self.row-1][i].color != self.AI.color:
-        #         enemy = enemy+self.board.table[self.row-1][i].point
-        
         
         for i in range(self.row):
             for j in range(self.col):
@@ -130,65 +110,79 @@ class GameTree:
 
 
     @staticmethod
-    def minimax(node, player, layer, limit):
+    def minimax(node, player, layer, limit, alpha, beta):
         if layer==limit:
             return node.sitPoint
         
         if layer==0:
             bestValue = -100000
-            for i in range(node.row):
-                for j in range(node.col):
-                    if(player[layer%2].canMove(node.board, i, j)):
-                        nB = Board(node.row, node.col).copy(node.board)
-                        try:
-                            player[layer%2].makeMove(nB, i, j)
-                            node.children[i][j] = GameTree(nB, node.AI, i, j)
-                            val = GameTree.minimax(node.children[i][j], player, layer+1, limit)
-                        except RecursionError as error:
-                            val = 100000
-                            continue
-                        if val>bestValue:
-                            bestValue = val
-                            node.coordinate = [i,j]
+            try:
+                for i in range(node.row):
+                    for j in range(node.col):
+                        if(player[layer%2].canMove(node.board, i, j)):
+                            nB = Board(node.row, node.col).copy(node.board)
+                            try:
+                                player[layer%2].makeMove(nB, i, j)
+                                node.children[i][j] = GameTree(nB, node.AI, i, j)
+                                val = GameTree.minimax(node.children[i][j], player, layer+1, limit)
+                            except RecursionError as error:
+                                bestValue = 100000
+                                node.coordinate = [i,j]
+                                raise GetOutOfLoop
+                            if val>=bestValue:
+                                bestValue = val
+                                node.coordinate = [i,j]
+            except GetOutOfLoop:
+                pass
             node.sitPoint = bestValue
             return bestValue
 
         if layer!=0 and layer%2==0:
             bestValue = -100000
-            for i in range(node.row):
-                for j in range(node.col):
-                    if(player[layer%2].canMove(node.board, i, j)):
-                        nB = Board(node.row, node.col).copy(node.board)
-                        # prevent recursion error
-                        try:
-                            player[layer%2].makeMove(nB, i, j)
-                            node.children[i][j] = GameTree(nB, node.AI, i, j)
-                            val = GameTree.minimax(node.children[i][j], player, layer+1, limit)
-                        except RecursionError as error:
-                            val = 100000
-                            continue
-                        if val>bestValue:
-                            bestValue = val
+            try:
+                for i in range(node.row):
+                    for j in range(node.col):
+                        if(player[layer%2].canMove(node.board, i, j)):
+                            nB = Board(node.row, node.col).copy(node.board)
+                            # prevent recursion error
+                            try:
+                                player[layer%2].makeMove(nB, i, j)
+                                node.children[i][j] = GameTree(nB, node.AI, i, j)
+                                val = GameTree.minimax(node.children[i][j], player, layer+1, limit)
+                            except RecursionError as error:
+                                bestValue = 100000
+                                raise GetOutOfLoop
+                            if val>bestValue:
+                                bestValue = val
+            except GetOutOfLoop:
+                pass
 
             node.sitPoint = bestValue
             return bestValue
 
         if layer%2==1:
             bestValue = 100000
-            for i in range(node.row):
-                for j in range(node.col):
-                    if(player[layer%2].canMove(node.board, i, j)):
-                        nB = Board(node.row, node.col).copy(node.board)
-                        # prevent recursion error
-                        try:
-                            player[layer%2].makeMove(nB, i, j)
-                            node.children[i][j] = GameTree(nB, node.AI, i, j)
-                            val = GameTree.minimax(node.children[i][j], player, layer+1, limit)
-                        except RecursionError as error:
-                            val = -100000
-                            continue
-                        if val<bestValue:
-                            bestValue = val
+            try:
+                for i in range(node.row):
+                    for j in range(node.col):
+                        if(player[layer%2].canMove(node.board, i, j)):
+                            nB = Board(node.row, node.col).copy(node.board)
+                            # prevent recursion error
+                            try:
+                                player[layer%2].makeMove(nB, i, j)
+                                node.children[i][j] = GameTree(nB, node.AI, i, j)
+                                val = GameTree.minimax(node.children[i][j], player, layer+1, limit)
+                            except RecursionError as error:
+                                bestValue = -100000
+                                raise GetOutOfLoop
+                            if val<bestValue:
+                                bestValue = val
+            except GetOutOfLoop:
+                pass
 
             node.sitPoint = bestValue
             return bestValue
+
+
+class GetOutOfLoop( Exception ):
+    pass
