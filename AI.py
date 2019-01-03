@@ -76,6 +76,27 @@ class GameTree:
         alliance = 0
         enemy = 0
         for i in range(self.row):
+            if self.board.table[i][0].color == self.AI.color:
+                alliance = alliance+self.board.table[i][0].point
+            if self.board.table[i][self.col-1].color == self.AI.color:
+                alliance = alliance+self.board.table[i][self.col-1].point
+            if self.board.table[i][0].color != self.AI.color:
+                alliance = alliance+self.board.table[i][0].point
+            if self.board.table[i][self.col-1].color != self.AI.color:
+                enemy = enemy+self.board.table[i][self.col-1].point
+
+        for i in range(self.col):
+            if self.board.table[0][i].color == self.AI.color:
+                alliance = alliance+self.board.table[0][i].point
+            if self.board.table[self.row-1][i].color == self.AI.color:
+                alliance = alliance+self.board.table[self.row-1][i].point
+            if self.board.table[0][i].color != self.AI.color:
+                alliance = alliance+self.board.table[0][i].point
+            if self.board.table[self.row-1][i].color != self.AI.color:
+                enemy = enemy+self.board.table[self.row-1][i].point
+        
+        
+        for i in range(self.row):
             for j in range(self.col):
                 if self.board.table[i][j].color == self.AI.color:
                     alliance = alliance+self.board.table[i][j].point
