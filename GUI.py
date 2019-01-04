@@ -7,6 +7,7 @@ from AI import AI
 
 xlist = [73,133,193,253,313,373,433]
 ylist = [70,128,186,242,302,360,418,476,534,592]
+clock = pg.time.Clock()
 
 class Game:
     row = len(xlist)
@@ -104,11 +105,12 @@ class GUI:
         running = True
         begin = False
         while running:
+            skip = False
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False	
                 
-                if event.type == pg.MOUSEBUTTONUP:
+                if event.type == pg.MOUSEBUTTONUP and Game.count%2==0:
                     if not begin:
                         begin = True
                         continue
@@ -131,40 +133,44 @@ class GUI:
                                 print(j+" wins!")
                                 break
                             GUI.setText(screen,players[1].color+"'s turn")
+                            skip = True
                             print(players[1].color+"'s turn")
 
                         except RecursionError as error:
                             self.final(True)
                             print(players[0].color+" wins!")
                             break
-
-                        try:
-                            # AI make move
-                            players[1].think(board, Game.count)
-                            board.printBoard()
-                            GUI.drawboard(self.screen, 50,50,board.table)
-                            # count the round and judge the game
-                            Game.count = Game.count+1
-                            j = Game.judge(board)
-                            if j!="" and Game.count>1:
-                                if j=="P":
-                                    self.final(True)
-                                else:
-                                    self.final(False)
-                                print(j+" wins!")
-                                break
-                            print(players[0].color+"'s turn")
-                            GUI.setText(screen,players[0].color+"'s turn")
-                        
-                        except RecursionError as error:
-                            self.final(False)
-                            print(players[1].color+" wins!")
-                            break
                     except ValueError as error:
                         Game.count = Game.count-1
                         print(repr(error))
 
-                    print(move)
+            if Game.count%2==1 and not skip:        
+                try:
+                    try:
+                        # AI make move
+                        players[1].think(board, Game.count)
+                        board.printBoard()
+                        GUI.drawboard(self.screen, 50,50,board.table)
+                        # count the round and judge the game
+                        Game.count = Game.count+1
+                        j = Game.judge(board)
+                        if j!="" and Game.count>1:
+                            if j=="P":
+                                self.final(True)
+                            else:
+                                self.final(False)
+                            print(j+" wins!")
+                            break
+                        print(players[0].color+"'s turn")
+                        GUI.setText(screen,players[0].color+"'s turn")
+                    
+                    except RecursionError as error:
+                        self.final(False)
+                        print(players[1].color+" wins!")
+                        break
+                except ValueError as error:
+                    Game.count = Game.count-1
+                    print(repr(error))
 
     def firstbutton(self,x,y,width,height,action = None):
         screen = self.screen
