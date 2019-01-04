@@ -13,7 +13,7 @@
 
 ## HOW TO PLAY
 
-- play with people
+- Play with people
 ```
 # python3 Game.py People <board row number> <board column number>
 python3 Game.py People 5 5
@@ -29,15 +29,21 @@ q
 
 ```
 
-- play with AI
+- Play with AI
 ```
 # python3 Game.py AI <difficulty 0-5>
 python3 Game.py AI 1
 
 ```
 
-- watch AI play
+- Watch AI play
 ```
 # python3 Game.py AI_GAME <difficulty 0-5> <difficulty 0-5>
 python3 Game.py AI_GAME 2 3
+```
+
+- Play using GUI (only support play_with_ai mode)
+```
+pip install pygame
+python3 GUI.py
 ```
