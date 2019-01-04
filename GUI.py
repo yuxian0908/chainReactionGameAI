@@ -7,11 +7,11 @@ from AI import AI
 
 xlist = [73,133,193,253,313,373,433]
 ylist = [70,128,186,242,302,360,418,476,534,592]
-clock = pg.time.Clock()
 
 class Game:
     row = len(xlist)
     col = len(ylist)
+    finish = False
     difficulty = 3
     count = 0
     def __init__(self):
@@ -111,6 +111,9 @@ class GUI:
                     running = False	
                 
                 if event.type == pg.MOUSEBUTTONUP and Game.count%2==0:
+                    if Game.finish:
+                        self.quit()
+                        break
                     if not begin:
                         begin = True
                         continue
@@ -131,7 +134,7 @@ class GUI:
                                 else:
                                     self.final(False)
                                 print(j+" wins!")
-                                break
+                                continue
                             GUI.setText(screen,players[1].color+"'s turn")
                             skip = True
                             print(players[1].color+"'s turn")
@@ -139,7 +142,7 @@ class GUI:
                         except RecursionError as error:
                             self.final(True)
                             print(players[0].color+" wins!")
-                            break
+                            continue
                     except ValueError as error:
                         Game.count = Game.count-1
                         print(repr(error))
@@ -160,17 +163,18 @@ class GUI:
                             else:
                                 self.final(False)
                             print(j+" wins!")
-                            break
+                            continue
                         print(players[0].color+"'s turn")
                         GUI.setText(screen,players[0].color+"'s turn")
                     
                     except RecursionError as error:
                         self.final(False)
                         print(players[1].color+" wins!")
-                        break
+                        continue
                 except ValueError as error:
                     Game.count = Game.count-1
                     print(repr(error))
+
 
     def firstbutton(self,x,y,width,height,action = None):
         screen = self.screen
@@ -215,10 +219,13 @@ class GUI:
         pg.display.update()
 
     @staticmethod
-    def setText(screen,text):
+    def setText(screen,text,big=False):
         top = 5
         left = 180
         head = pg.Rect((left,top),(200,40))
+        if big:
+            left = 155
+            head = pg.Rect((left,top),(250,40))    
         screen.fill((255,255,0), head)
         pg.font.init()
         font = pg.font.SysFont('Comic Sans MS', 50)
@@ -237,7 +244,9 @@ class GUI:
         rect = picture.get_rect()
         rect = rect.move((100,300))
         self.screen.blit(picture, rect)
+        GUI.setText(self.screen, "press to exit", True)
         pg.display.update()
+        Game.finish = True
 
     @staticmethod
     # get mouse position
